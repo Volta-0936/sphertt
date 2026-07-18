@@ -1,5 +1,7 @@
 # sphertt
 
+[![DOI](https://zenodo.org/badge/1305159049.svg)](https://zenodo.org/badge/latestdoi/1305159049)
+
 **Hyperspherical reservoir computing with tensor-train connectivity.**
 Reservoirs beyond the memory wall — with a built-in, quantitatively
 validated theory of when truncation is safe.
