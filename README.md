@@ -163,6 +163,17 @@ configuration and evaluates the law.
   long-memory tasks — see the memory-capacity numbers.
 - This is research software (v0.1, alpha). The API may move.
 
+## Papers
+
+Two papers (drafts, PDFs attached to the
+[v0.4.0 release](https://github.com/Volta-0936/sphertt/releases/tag/v0.4.0)):
+
+1. [Quasi-Orthogonal Tensor-Train Reservoirs: Hyperspherical Reservoir
+   Computing Beyond the Memory Wall](https://github.com/Volta-0936/sphertt/releases/download/v0.4.0/okamura2026-quasi-orthogonal-tt-reservoirs.pdf)
+2. [Truncated Tensor-Train Reservoirs Are Reservoirs in Their Own Right:
+   A Two-Resource Law for Memory Beyond the State
+   Wall](https://github.com/Volta-0936/sphertt/releases/download/v0.4.0/okamura2026-two-resource-law-beyond-state-wall.pdf)
+
 ## Experiments
 
 The `experiments/` directory ships the scripts, JSONL logs, and figures
