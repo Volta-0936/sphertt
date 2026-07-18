@@ -29,7 +29,7 @@ dependencies = ["numpy>=1.22"]
 dev = ["pytest>=7"]
 
 [project.urls]
-Homepage = "https://github.com/CHANGE_ME/sphertt"
+Homepage = "https://github.com/Volta-0936/sphertt"
 
 [tool.setuptools.packages.find]
 where = ["src"]
