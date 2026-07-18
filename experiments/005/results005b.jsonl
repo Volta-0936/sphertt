@@ -1,0 +1,11 @@
+{"mode": 4, "n_dims": 8, "chi_x": 16, "chi_w": 8, "beta": 0.8, "N": 65536, "delta_mean": 0.2548938119761301, "ms_per_step": 33.696678479512535}
+{"mode": 4, "n_dims": 8, "chi_x": 24, "chi_w": 8, "beta": 0.8, "N": 65536, "delta_mean": 0.24256169051386334, "ms_per_step": 121.66502157847087}
+{"mode": 4, "n_dims": 8, "chi_x": 32, "chi_w": 8, "beta": 0.8, "N": 65536, "delta_mean": 0.2305176512366615, "ms_per_step": 184.69154198964438}
+{"mode": 2, "n_dims": 16, "chi_x": 16, "chi_w": 8, "beta": 0.8, "N": 65536, "delta_mean": 0.2526505050798577, "ms_per_step": 34.59702173868815}
+{"mode": 2, "n_dims": 16, "chi_x": 24, "chi_w": 8, "beta": 0.8, "N": 65536, "delta_mean": 0.23546126868204462, "ms_per_step": 64.47787443796793}
+{"mode": 2, "n_dims": 16, "chi_x": 32, "chi_w": 8, "beta": 0.8, "N": 65536, "delta_mean": 0.2176780846577003, "ms_per_step": 208.14393361409506}
+{"mode": 4, "n_dims": 8, "chi_x": 16, "chi_w": 4, "beta": 0.8, "N": 65536, "delta_mean": 0.25709522529081247, "ms_per_step": 13.458941777547201}
+{"mode": 4, "n_dims": 8, "chi_x": 16, "chi_w": 2, "beta": 0.8, "N": 65536, "delta_mean": 0.2706014011388839, "ms_per_step": 5.272334416707357}
+{"mode": 4, "n_dims": 8, "chi_x": 16, "chi_w": 8, "beta": 0.9, "N": 65536, "delta_mean": 0.1375636906591848, "ms_per_step": 31.91527525583903}
+{"mode": 4, "n_dims": 8, "chi_x": 16, "chi_w": 8, "beta": 0.95, "N": 65536, "delta_mean": 0.09771501169087886, "ms_per_step": 29.887329737345375}
+{"mode": 4, "n_dims": 8, "chi_x": 16, "chi_w": 2, "beta": 0.95, "N": 65536, "delta_mean": 0.10758694500765029, "ms_per_step": 5.348553657531738}

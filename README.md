@@ -163,6 +163,12 @@ configuration and evaluates the law.
   long-memory tasks — see the memory-capacity numbers.
 - This is research software (v0.1, alpha). The API may move.
 
+## Experiments
+
+The `experiments/` directory ships the scripts, JSONL logs, and figures
+behind the papers, including the prediction-before-measurement records
+(see `experiments/README.md`).
+
 ## Cite
 
 Paper in preparation. Until then, please cite this repository.

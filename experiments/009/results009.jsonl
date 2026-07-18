@@ -1,0 +1,15 @@
+{"tag": "dense-state", "task": "delay50", "nrmse": 0.0430669051616995, "r2": 0.9981460507730414, "n_dims": 5, "N": 1024, "beta": 0.8, "ms_per_step": 0.15303003787994385}
+{"tag": "dense-state", "task": "delay100", "nrmse": 0.08532909503021587, "r2": 0.9927783723698411, "n_dims": 5, "N": 1024, "beta": 0.8, "ms_per_step": 0.15303003787994385}
+{"tag": "dense-state", "task": "delay200", "nrmse": 0.17891401455527617, "r2": 0.9680169844755455, "n_dims": 5, "N": 1024, "beta": 0.8, "ms_per_step": 0.15303003787994385}
+{"tag": "dense-state", "task": "delay50", "nrmse": 0.06574338214649704, "r2": 0.9956830325493722, "n_dims": 7, "N": 16384, "beta": 0.8, "ms_per_step": 4.27777373790741}
+{"tag": "dense-state", "task": "delay100", "nrmse": 0.09908787520819713, "r2": 0.9901833066589634, "n_dims": 7, "N": 16384, "beta": 0.8, "ms_per_step": 4.27777373790741}
+{"tag": "dense-state", "task": "delay200", "nrmse": 0.15382634694999678, "r2": 0.976570766984151, "n_dims": 7, "N": 16384, "beta": 0.8, "ms_per_step": 4.27777373790741}
+{"tag": "dense-state", "task": "delay50", "nrmse": 0.06110707934981994, "r2": 0.996274946794947, "n_dims": 9, "N": 262144, "beta": 0.8, "ms_per_step": 94.82047688961029}
+{"tag": "dense-state", "task": "delay100", "nrmse": 0.09325962947162603, "r2": 0.9913230992944521, "n_dims": 9, "N": 262144, "beta": 0.8, "ms_per_step": 94.82047688961029}
+{"tag": "dense-state", "task": "delay200", "nrmse": 0.13966254697876887, "r2": 0.980591362544059, "n_dims": 9, "N": 262144, "beta": 0.8, "ms_per_step": 94.82047688961029}
+{"tag": "tt-state-guided", "task": "delay50", "nrmse": 0.6858623414090903, "r2": 0.5316303053474735, "n_dims": 15, "N": 1073741824, "beta": 0.99, "chi_x": 48, "ms_per_step": 970.0105764865875, "delta_bar": 0.11555099093564992}
+{"tag": "tt-state-guided", "task": "delay100", "nrmse": 0.8484195611944825, "r2": 0.28467967803197014, "n_dims": 15, "N": 1073741824, "beta": 0.99, "chi_x": 48, "ms_per_step": 970.0105764865875, "delta_bar": 0.11555099093564992}
+{"tag": "tt-state-guided", "task": "delay200", "nrmse": 1.000184954601865, "r2": 0.0007033827353052554, "n_dims": 15, "N": 1073741824, "beta": 0.99, "chi_x": 48, "ms_per_step": 970.0105764865875, "delta_bar": 0.11555099093564992}
+{"tag": "tt-state-naive", "task": "delay50", "nrmse": 1.0000159831136417, "r2": 0.0, "n_dims": 15, "N": 1073741824, "beta": 0.8, "chi_x": 16, "ms_per_step": 118.54028993844986, "delta_bar": 1.2167731359648708}
+{"tag": "tt-state-naive", "task": "delay100", "nrmse": 0.9996496174823365, "r2": 0.0007223224200024874, "n_dims": 15, "N": 1073741824, "beta": 0.8, "chi_x": 16, "ms_per_step": 118.54028993844986, "delta_bar": 1.2167731359648708}
+{"tag": "tt-state-naive", "task": "delay200", "nrmse": 1.0002050012847874, "r2": 0.0, "n_dims": 15, "N": 1073741824, "beta": 0.8, "chi_x": 16, "ms_per_step": 118.54028993844986, "delta_bar": 1.2167731359648708}
