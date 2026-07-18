@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "sphertt: hyperspherical reservoir computing with tensor-train connectivity"
+authors:
+  - family-names: Okamura
+    given-names: Takuya
+    email: voltatable@gmail.com
+license: MIT
+repository-code: "https://github.com/Volta-0936/sphertt"
+keywords:
+  - reservoir computing
+  - echo state network
+  - tensor train
+  - matrix product states
+  - hypersphere
+version: 0.4.0
+date-released: 2026-07-19

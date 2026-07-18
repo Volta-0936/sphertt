@@ -1,0 +1,19 @@
+{
+  "title": "sphertt: hyperspherical reservoir computing with tensor-train connectivity",
+  "description": "Pure-NumPy library for hyperspherical reservoir computing with tensor-train (TT) connectivity and native TT state evolution. Implements the quasi-orthogonal connectivity family W(beta), the truncation-error amplification law diagnostics (g_bar, delta_bar), and the TT-state reservoir engine that sustains memory capacity at state dimensions beyond 10^9 with sub-megabyte models.",
+  "creators": [
+    {
+      "name": "Okamura, Takuya"
+    }
+  ],
+  "license": "MIT",
+  "upload_type": "software",
+  "keywords": [
+    "reservoir computing",
+    "echo state network",
+    "tensor train",
+    "matrix product states",
+    "hypersphere",
+    "time series"
+  ]
+}
