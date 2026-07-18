@@ -6,6 +6,7 @@ authors:
     given-names: Takuya
     email: voltatable@gmail.com
 license: MIT
+doi: 10.5281/zenodo.21433254
 repository-code: "https://github.com/Volta-0936/sphertt"
 keywords:
   - reservoir computing

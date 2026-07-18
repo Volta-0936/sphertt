@@ -184,7 +184,9 @@ behind the papers, including the prediction-before-measurement records
 
 ## Cite
 
-Paper in preparation. Until then, please cite this repository.
+Software: DOI [10.5281/zenodo.21433254](https://doi.org/10.5281/zenodo.21433254)
+(all versions; see `CITATION.cff`).  For the scientific results, cite the
+papers above.
 
 ## License
 
