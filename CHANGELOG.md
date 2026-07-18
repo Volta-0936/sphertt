@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.1 (2026-07-19)
+
+- Ship `experiments/`: scripts, JSONL logs, figures, and
+  prediction-before-measurement records behind the papers.
+- README: link the paper PDFs; citation metadata (CITATION.cff,
+  .zenodo.json); Zenodo archival enabled from this release.
+
 ## 0.4.0 (2026-07-18)
 
 - **`ESN.save` / `ESN.load` now support `TTStateReservoir`** (format 2:
