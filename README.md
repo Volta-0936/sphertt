@@ -172,9 +172,11 @@ Two papers (drafts, PDFs attached to the
 
 1. [Quasi-Orthogonal Tensor-Train Reservoirs: Hyperspherical Reservoir
    Computing Beyond the Memory Wall](https://github.com/Volta-0936/sphertt/releases/latest/download/okamura2026-quasi-orthogonal-tt-reservoirs.pdf)
+   — DOI [10.5281/zenodo.21433291](https://doi.org/10.5281/zenodo.21433291)
 2. [Truncated Tensor-Train Reservoirs Are Reservoirs in Their Own Right:
    A Two-Resource Law for Memory Beyond the State
    Wall](https://github.com/Volta-0936/sphertt/releases/latest/download/okamura2026-two-resource-law-beyond-state-wall.pdf)
+   — DOI [10.5281/zenodo.21433407](https://doi.org/10.5281/zenodo.21433407)
 
 ## Experiments
 
