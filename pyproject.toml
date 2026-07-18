@@ -9,7 +9,7 @@ description = "Hyperspherical reservoir computing with tensor-train connectivity
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
-authors = [{ name = "Riku" }]
+authors = [{ name = "Takuya Okamura", email = "voltatable@gmail.com" }]
 keywords = [
     "reservoir computing", "echo state network", "tensor train",
     "matrix product states", "tensor networks", "time series",
