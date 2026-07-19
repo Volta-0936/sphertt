@@ -1,9 +1,9 @@
 import numpy as np
 import pytest
 
-from sphertt.tt import (power_iteration_norm, tt_params, tt_svd, tt_to_dense,
-                        ttm_add, ttm_kron_orthogonal, ttm_matvec, ttm_random,
-                        ttm_svd, ttm_to_dense)
+from sphertt.tt import (power_iteration_norm, tt_params, tt_round, tt_svd,
+                        tt_to_dense, ttm_add, ttm_kron_orthogonal,
+                        ttm_matvec, ttm_random, ttm_svd, ttm_to_dense)
 
 RNG = np.random.default_rng(0)
 DIMS = [4] * 5
@@ -67,6 +67,18 @@ def test_ttm_to_dense_memory_guard():
     cores = ttm_random([4] * 10, [4] * 10, 2, RNG)
     with pytest.raises(MemoryError):
         ttm_to_dense(cores)
+
+
+def test_tt_round_cholqr2_matches_qr_fp64():
+    # opt-in cholqr2 must represent the same vector as the default QR
+    # (float64 only; float32 is documented as unsupported for cholqr2)
+    x = RNG.standard_normal(N)
+    cores = tt_svd(x, DIMS, chi=10 ** 9)
+    a, ea = tt_round([c.copy() for c in cores], 8, orth="qr")
+    b, eb = tt_round([c.copy() for c in cores], 8, orth="cholqr2")
+    va, vb = tt_to_dense(a), tt_to_dense(b)
+    assert np.linalg.norm(va - vb) < 1e-8 * np.linalg.norm(va)
+    assert abs(ea - eb) < 1e-6 * max(ea, 1e-12)
 
 
 def test_tt_params_counts():

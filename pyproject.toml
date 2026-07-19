@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sphertt"
-version = "0.5.0"
+version = "0.5.1"
 description = "Hyperspherical reservoir computing with tensor-train connectivity — reservoirs beyond the memory wall, with built-in truncation-error diagnostics"
 readme = "README.md"
 requires-python = ">=3.9"

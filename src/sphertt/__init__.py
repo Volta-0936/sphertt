@@ -26,7 +26,7 @@ from .reservoir import SphereTTReservoir
 from .tasks import mackey_glass, memory_capacity, narma, nrmse
 from .ttstate import TTStateReservoir
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 __all__ = [
     "ESN", "SphereTTReservoir", "TTStateReservoir", "RidgeReadout",

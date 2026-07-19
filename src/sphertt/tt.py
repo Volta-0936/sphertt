@@ -122,11 +122,45 @@ def tt_norm(cores):
     return float(xp.sqrt(abs(G[0, 0])))
 
 
-def tt_round(cores, chi):
+def _tall_qr(A, xp, method):
+    """Economy QR of A.  method 'cholqr2' uses shifted CholeskyQR2 —
+    GEMM-dominated and much faster on GPUs — for tall matrices, falling
+    back to standard QR for wide ones (cheap edge cores).
+
+    The shift degrades only the orthogonality of Q (repaired by the
+    second pass), never the factorization identity A = Q R, so the
+    represented tensor is unchanged.
+    """
+    m, s = A.shape
+    if method == "qr" or m < s:
+        return xp.linalg.qr(A)
+    eps = float(np.finfo(A.dtype).eps)
+    I = xp.eye(s, dtype=A.dtype)
+
+    def _pass(B):
+        G = B.T @ B
+        shift = 10.0 * eps * xp.trace(G) + np.finfo(A.dtype).tiny
+        L = xp.linalg.cholesky(G + shift * I)
+        R = L.T
+        return B @ xp.linalg.solve(R, I), R
+
+    Q1, R1 = _pass(A)
+    Q, R2 = _pass(Q1)
+    return Q, R2 @ R1
+
+
+def tt_round(cores, chi, orth="auto"):
     """Round (recompress) a TT vector to maximum bond dimension ``chi``.
 
     Standard TT rounding: right-to-left QR orthogonalization followed by a
-    left-to-right truncated-SVD sweep.
+    left-to-right truncated-SVD sweep.  ``orth`` selects the
+    orthogonalization kernel: "auto"/"qr" (LAPACK/cuSOLVER QR — the
+    default everywhere) or "cholqr2" (shifted CholeskyQR2,
+    GEMM-dominated).  cholqr2 is float64-only — at float32 the squared
+    bond condition number exceeds the representable range and the
+    dynamics is destroyed — and only pays off on hardware with full-rate
+    float64 GEMM (datacenter GPUs); on consumer GPUs the default QR is
+    faster.  Measurements: prototype/011.
 
     Returns
     -------
@@ -143,11 +177,13 @@ def tt_round(cores, chi):
         represented vector.
     """
     xp = get_array_module(cores[0])
+    if orth == "auto":
+        orth = "qr"
     d = len(cores)
     cores = list(cores)
     for k in range(d - 1, 0, -1):
         r0, n, r1 = cores[k].shape
-        Q, R = xp.linalg.qr(cores[k].reshape(r0, n * r1).T)
+        Q, R = _tall_qr(cores[k].reshape(r0, n * r1).T, xp, orth)
         cores[k] = Q.T.reshape(-1, n, r1)
         cores[k - 1] = xp.tensordot(cores[k - 1], R.T, axes=([2], [0]))
     err2 = xp.zeros((), dtype=cores[0].dtype)

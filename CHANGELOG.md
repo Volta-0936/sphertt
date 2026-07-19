@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.1 (2026-07-19)
+
+- Add opt-in `orth="cholqr2"` to `tt_round` (shifted CholeskyQR2,
+  GEMM-dominated orthogonalization).  Honest measurements
+  (prototype/011): on a consumer GPU it does NOT pay — float32 destroys
+  the dynamics (squared bond condition numbers exceed the float32 range;
+  delta_bar 0.09 -> 0.70 at n_dims=15) and float64 is slower than
+  cuSOLVER QR (556 vs 490 ms/step) because consumer cards cap float64
+  GEMM at 1/64 rate.  The default remains "qr" everywhere; cholqr2 is
+  kept, tested (float64 representation matches QR to 1e-8), and
+  documented for hardware with full-rate float64 (datacenter GPUs).
+
 ## 0.5.0 (2026-07-19)
 
 - **GPU backend (optional)**: `reservoir.to("cupy", "float32")` moves the
