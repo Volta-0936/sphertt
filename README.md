@@ -1,6 +1,9 @@
 # sphertt
 
 [![DOI](https://zenodo.org/badge/1305159049.svg)](https://zenodo.org/badge/latestdoi/1305159049)
+[![tests](https://github.com/Volta-0936/sphertt/actions/workflows/ci.yml/badge.svg)](https://github.com/Volta-0936/sphertt/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Papers](https://img.shields.io/badge/papers-10.5281%2Fzenodo.21433291%20%7C%2021433407-blue)](https://doi.org/10.5281/zenodo.21433291)
 
 **Hyperspherical reservoir computing with tensor-train connectivity.**
 Reservoirs beyond the memory wall — with a built-in, quantitatively
