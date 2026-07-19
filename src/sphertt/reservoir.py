@@ -18,17 +18,33 @@ from __future__ import annotations
 import numpy as np
 
 from .tt import (power_iteration_norm, power_iteration_norm_tt, to_numpy,
-                 ttm_add, ttm_kron_orthogonal, ttm_matvec, ttm_params,
-                 ttm_random)
+                 ttm_add, ttm_kron_orthogonal, ttm_kron_sum, ttm_matvec,
+                 ttm_params, ttm_random)
 
 __all__ = ["SphereTTReservoir", "build_w"]
 
 
-def build_w(dims, beta, chi_w, rng):
+def build_w(dims, beta, chi_w, rng, kind="random-tt"):
     """Build the quasi-orthogonal TT connectivity W(beta) = beta*Q_kron +
     (1-beta)*W_tt (total TT rank <= 1 + chi_w).  Shared by the dense-state
-    and TT-state reservoirs; identical rng state gives identical W."""
-    W_tt = ttm_random(dims, dims, chi_w, rng)
+    and TT-state reservoirs; identical rng state gives identical W.
+
+    ``kind`` selects the perturbation family W_tt:
+      "random-tt"     : dense-rank random Gaussian TT matrix (default)
+      "kron-sum"      : sum of chi_w random Kronecker rank-1 terms
+      "kron-orth-sum" : sum of chi_w orthogonal Kronecker terms
+    The kron families are the *structured perturbations*: rank-chi states
+    stay closer to low rank under them, shrinking both rounding cost and
+    incompressible-error injection.
+    """
+    if kind == "random-tt":
+        W_tt = ttm_random(dims, dims, chi_w, rng)
+    elif kind == "kron-sum":
+        W_tt = ttm_kron_sum(dims, chi_w, rng, orthogonal=False)
+    elif kind == "kron-orth-sum":
+        W_tt = ttm_kron_sum(dims, chi_w, rng, orthogonal=True)
+    else:
+        raise ValueError(f"unknown connectivity kind {kind!r}")
     N = int(np.prod(dims))
     # dense-vector power iteration up to N = 4^9 (keeps v0.1/v0.2
     # reproducibility there); TT-native beyond, where a dense iterate
@@ -72,7 +88,7 @@ class SphereTTReservoir:
     """
 
     def __init__(self, n_dims, mode_size=4, beta=0.8, chi_w=8,
-                 in_scale="auto", n_in=1, seed=0):
+                 in_scale="auto", n_in=1, w_kind="random-tt", seed=0):
         if not 0.0 <= beta <= 1.0:
             raise ValueError("beta must be in [0, 1]")
         if int(n_in) < 1:
@@ -82,10 +98,11 @@ class SphereTTReservoir:
         self.beta = float(beta)
         self.chi_w = int(chi_w)
         self.n_in = int(n_in)
+        self.w_kind = str(w_kind)
         self.seed = int(seed)
         rng = np.random.default_rng(seed)
 
-        self.W = build_w(self.dims, self.beta, self.chi_w, rng)
+        self.W = build_w(self.dims, self.beta, self.chi_w, rng, self.w_kind)
 
         if in_scale == "auto":
             in_scale = 0.02 * np.sqrt(1024.0 / self.N) / np.sqrt(self.n_in)

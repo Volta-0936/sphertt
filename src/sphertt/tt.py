@@ -35,7 +35,8 @@ __all__ = [
     "tt_svd", "tt_to_dense", "tt_ranks", "tt_params",
     "tt_zeros", "tt_add", "tt_norm", "tt_round", "tt_entries",
     "tt_rank1_kron_sum",
-    "ttm_svd", "ttm_random", "ttm_kron_orthogonal", "ttm_add",
+    "ttm_svd", "ttm_random", "ttm_kron_orthogonal", "ttm_kron_sum",
+    "ttm_add",
     "ttm_to_dense", "ttm_params", "ttm_matvec", "ttm_ttv",
     "power_iteration_norm", "get_array_module", "to_numpy",
 ]
@@ -280,6 +281,39 @@ def ttm_kron_orthogonal(dims, rng):
         q, r = np.linalg.qr(rng.standard_normal((n, n)))
         q = q * np.sign(np.diag(r))
         cores.append(q.reshape(1, n, n, 1))
+    return cores
+
+
+def ttm_kron_sum(dims, K, rng, orthogonal=False):
+    """Sum of ``K`` Kronecker-product terms as a TT matrix of rank ``K``.
+
+    Each term is a Kronecker product of per-mode factors: random Gaussian
+    (``orthogonal=False``) or Haar-orthogonal (``orthogonal=True``, making
+    every term an exact isometry).  This is the *structured perturbation*
+    family: applied to a rank-chi TT state it produces rank <= K*chi
+    (versus chi_w*chi for a dense-rank random TT matrix), so both the
+    rounding cost and the incompressible-error injection shrink.
+    """
+    d = len(dims)
+    factors = []
+    for _ in range(int(K)):
+        fs = []
+        for n in dims:
+            if orthogonal:
+                q, r = np.linalg.qr(rng.standard_normal((n, n)))
+                fs.append(q * np.sign(np.diag(r)))
+            else:
+                fs.append(rng.standard_normal((n, n)) / np.sqrt(n))
+        factors.append(fs)
+    cores = []
+    for k, n in enumerate(dims):
+        r0 = 1 if k == 0 else int(K)
+        r1 = 1 if k == d - 1 else int(K)
+        c = np.zeros((r0, n, n, r1))
+        for j in range(int(K)):
+            c[0 if k == 0 else j, :, :, 0 if k == d - 1 else j] += \
+                factors[j][k]
+        cores.append(c)
     return cores
 
 

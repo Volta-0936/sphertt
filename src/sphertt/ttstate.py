@@ -68,7 +68,8 @@ class TTStateReservoir:
     """
 
     def __init__(self, n_dims, mode_size=4, beta=0.8, chi_w=8, chi_x=16,
-                 chi_in=4, in_scale="auto", n_in=1, seed=0):
+                 chi_in=4, in_scale="auto", n_in=1, w_kind="random-tt",
+                 seed=0):
         if not 0.0 <= beta <= 1.0:
             raise ValueError("beta must be in [0, 1]")
         if int(n_in) < 1 or int(chi_in) < 1 or int(chi_x) < 1:
@@ -80,10 +81,11 @@ class TTStateReservoir:
         self.chi_x = int(chi_x)
         self.chi_in = int(chi_in)
         self.n_in = int(n_in)
+        self.w_kind = str(w_kind)
         self.seed = int(seed)
         rng = np.random.default_rng(seed)
 
-        self.W = build_w(self.dims, self.beta, self.chi_w, rng)
+        self.W = build_w(self.dims, self.beta, self.chi_w, rng, self.w_kind)
 
         if in_scale == "auto":
             in_scale = 0.02 * np.sqrt(1024.0 / self.N) / np.sqrt(self.n_in)

@@ -64,6 +64,22 @@ def test_single_channel_accepts_1d_and_2d():
     assert np.array_equal(X1, X2)
 
 
+def test_kron_sum_kinds_build_and_run():
+    from sphertt.tt import ttm_to_dense
+    for kind in ("kron-sum", "kron-orth-sum"):
+        res = SphereTTReservoir(n_dims=4, chi_w=3, w_kind=kind, seed=0)
+        assert max(c.shape[0] for c in res.W) <= 1 + 3      # rank <= 1+K
+        X = res.run(np.random.default_rng(0).uniform(0, 0.5, 50))
+        assert np.isfinite(X).all()
+        assert np.allclose(np.linalg.norm(X[5:], axis=1), 1.0, atol=1e-12)
+    # orthogonal variant: each Kronecker term is an exact isometry
+    from sphertt.tt import ttm_kron_sum
+    cores = ttm_kron_sum([4] * 3, 1, np.random.default_rng(0),
+                         orthogonal=True)
+    Q = ttm_to_dense(cores)
+    assert np.linalg.norm(Q @ Q.T - np.eye(64)) < 1e-10
+
+
 def test_auto_in_scale_scaling():
     r5 = SphereTTReservoir(n_dims=5, seed=0)
     r7 = SphereTTReservoir(n_dims=7, seed=0)
