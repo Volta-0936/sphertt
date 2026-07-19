@@ -1,0 +1,10 @@
+{"part": "effrank", "source": "d8_kron_T4k", "shape": [3700, 2048], "participation_ratio": 161.9, "rank95": 450, "rank99": 1073}
+{"part": "effrank", "source": "d15_kron_T4k", "shape": [3700, 2048], "participation_ratio": 79.3, "rank95": 734, "rank99": 1265}
+{"part": "effrank", "source": "d15_kron_T16k_K8192", "shape": [15700, 8192], "participation_ratio": 154.0, "rank95": 2381, "rank99": 4460}
+{"part": "effrank", "source": "d15_random_T4k", "shape": [3700, 2048], "participation_ratio": 42.4, "rank95": 289, "rank99": 694}
+{"part": "curve", "n_dims": 15, "w_kind": "random-tt", "beta": 0.99, "chi_x": 48, "K_readout": 8192, "T": 16000, "runner": "gpu", "mc300_test": 103.72, "alpha_star": 1e-06, "delta_bar": 0.11638, "ms_per_step": 467.4}
+{"part": "curve", "n_dims": 8, "w_kind": "random-tt", "beta": 0.92, "chi_x": 48, "K_readout": 2048, "T": 16000, "runner": "gpu", "mc300_test": 230.94, "alpha_star": 0.01, "delta_bar": 0.08702, "ms_per_step": 106.7}
+{"part": "curve", "n_dims": 8, "w_kind": "random-tt", "beta": 0.98, "chi_x": 48, "K_readout": 2048, "T": 16000, "runner": "gpu", "mc300_test": 252.57, "alpha_star": 0.01, "delta_bar": 0.04676, "ms_per_step": 98.3}
+{"part": "curve", "n_dims": 8, "w_kind": "kron-sum", "beta": 0.99, "chi_x": 48, "K_readout": 2048, "T": 16000, "runner": "cpu", "mc300_test": 277.42, "alpha_star": 0.0001, "delta_bar": 0.03118, "ms_per_step": 713.8}
+{"part": "curve", "n_dims": 8, "w_kind": "random-tt", "beta": 0.95, "chi_x": 48, "K_readout": 2048, "T": 16000, "runner": "cpu", "mc300_test": 245.52, "alpha_star": 0.01, "delta_bar": 0.06381, "ms_per_step": 150.6}
+{"part": "curve", "n_dims": 8, "w_kind": "random-tt", "beta": 0.9, "chi_x": 48, "K_readout": 2048, "T": 16000, "runner": "cpu", "mc300_test": 216.08, "alpha_star": 0.01, "delta_bar": 0.10475, "ms_per_step": 152.0}

@@ -15,6 +15,11 @@ path to re-run.  All experiments run on a single plain CPU.
 | `008` | seed-robustness batch (decomposition grid, MC crossover, headline; seeds 1-2) | Paper II seed ranges |
 | `009` | task validation: dense-state N sweep (delay-k, NARMA10) and TT-state at N > 1e9. `exp009_tasks2.py` / `results009b.jsonl` is the definitive protocol; `exp009_tasks.py` / `results009.jsonl` is the superseded first pass (kept for the record) | Paper I Table 1; Paper II Table 1 |
 | `010` | self-contained re-validation of the amplification law (45 configs) | Paper I Fig. 5 (validation) |
+| `011` | GPU backend benchmark + float32 physics validation; CholeskyQR2 negative result | library v0.5.x |
+| `012` | structured perturbations (kron-sum): +76-80% MC at d=8, depth reversal isolation | Paper II v2 Sec. "Structured perturbations" |
+| `013` | depth mechanism: stock-term growth (beta=1 lane), chi_in independence, bond spectra | Paper II v2 Sec. "Depth resource" |
+| `014` | measurement systematics: readout dilution, training length, validated-alpha protocol; definitive d15 MC | Paper II v2 protocol |
+| `015` | noise-matched depth comparison (three-resource law), effective-rank analysis, records MC=277 / 104 | Paper II v2 Figs. 14-15 |
 
 Experiments 006 and 007 contain prediction-before-measurement records
 (`PREDICTIONS.md` in each directory): the model predictions were written

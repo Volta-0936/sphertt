@@ -1,0 +1,16 @@
+{"w_kind": "kron-sum", "chi_w": 2, "backend": "numpy", "dtype": "float64", "runner": "cpu", "beta": 0.95, "chi_x": 32, "mc300": 71.11, "narma10": 0.8514, "delta_bar": 0.07592, "ms_per_step": 38.8}
+{"w_kind": "random-tt", "chi_w": 8, "backend": "cupy", "dtype": "float32", "runner": "gpu", "beta": 0.95, "chi_x": 32, "mc300": 65.52, "narma10": 0.9134, "delta_bar": 0.07599, "ms_per_step": 88.9}
+{"w_kind": "kron-sum", "chi_w": 4, "backend": "numpy", "dtype": "float64", "runner": "cpu", "beta": 0.95, "chi_x": 32, "mc300": 47.48, "narma10": 1.0137, "delta_bar": 0.09126, "ms_per_step": 63.5}
+{"w_kind": "kron-orth-sum", "chi_w": 2, "backend": "numpy", "dtype": "float64", "runner": "cpu", "beta": 0.95, "chi_x": 32, "mc300": 69.91, "narma10": 0.9133, "delta_bar": 0.07745, "ms_per_step": 36.4}
+{"w_kind": "kron-sum", "chi_w": 8, "backend": "cupy", "dtype": "float32", "runner": "gpu", "beta": 0.95, "chi_x": 32, "mc300": 128.07, "narma10": 0.8744, "delta_bar": 0.06469, "ms_per_step": 88.3}
+{"w_kind": "kron-orth-sum", "chi_w": 4, "backend": "numpy", "dtype": "float64", "runner": "cpu", "beta": 0.95, "chi_x": 32, "mc300": 59.07, "narma10": 0.9228, "delta_bar": 0.08921, "ms_per_step": 76.6}
+{"w_kind": "kron-orth-sum", "chi_w": 8, "backend": "cupy", "dtype": "float32", "runner": "gpu", "beta": 0.95, "chi_x": 32, "mc300": 119.77, "narma10": 0.8076, "delta_bar": 0.06812, "ms_per_step": 83.8}
+{"part": "seeds", "w_kind": "kron-sum", "chi_w": 8, "seed": 1, "runner": "gpu", "beta": 0.95, "chi_x": 32, "mc300": 72.06, "delta_bar": 0.07642, "ms_per_step": 92.3}
+{"part": "seeds", "w_kind": "kron-sum", "chi_w": 8, "seed": 2, "runner": "gpu", "beta": 0.95, "chi_x": 32, "mc300": 106.31, "delta_bar": 0.06105, "ms_per_step": 98.6}
+{"part": "seeds", "w_kind": "random-tt", "chi_w": 8, "seed": 1, "runner": "cpu", "beta": 0.95, "chi_x": 32, "mc300": 40.5, "delta_bar": 0.07519, "ms_per_step": 275.2}
+{"part": "seeds", "w_kind": "random-tt", "chi_w": 8, "seed": 2, "runner": "cpu", "beta": 0.95, "chi_x": 32, "mc300": 67.84, "delta_bar": 0.07703, "ms_per_step": 132.8}
+{"part": "d15", "w_kind": "kron-sum", "seed": 0, "n_dims": 15, "N": 1073741824, "beta": 0.99, "chi_x": 48, "mc300": 37.5, "delta_bar": 0.09705, "ms_per_step": 367.3, "reference_random_tt": [73.7, 30.4, 41.4]}
+{"part": "d15", "w_kind": "kron-sum", "seed": 1, "n_dims": 15, "N": 1073741824, "beta": 0.99, "chi_x": 48, "mc300": 40.38, "delta_bar": 0.0953, "ms_per_step": 313.8, "reference_random_tt": [73.7, 30.4, 41.4]}
+{"part": "factorial", "w_kind": "kron-sum", "seed": 0, "n_dims": 8, "beta": 0.99, "chi_x": 48, "mc300": 186.01, "delta_bar": 0.03122, "ms_per_step": 72.3, "reference_random_tt": [113.6, 70.4, 103.1]}
+{"part": "factorial", "w_kind": "kron-sum", "seed": 1, "n_dims": 8, "beta": 0.99, "chi_x": 48, "mc300": 119.33, "delta_bar": 0.04323, "ms_per_step": 72.1, "reference_random_tt": [113.6, 70.4, 103.1]}
+{"part": "factorial", "w_kind": "kron-sum", "seed": 2, "n_dims": 8, "beta": 0.99, "chi_x": 48, "mc300": 213.99, "delta_bar": 0.02042, "ms_per_step": 71.1, "reference_random_tt": [113.6, 70.4, 103.1]}

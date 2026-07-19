@@ -1,0 +1,11 @@
+{"part": "A", "n_dims": 8, "chi_x": 48, "backend": "numpy", "dtype": "float64", "ms_per_step": 135.42, "delta_bar": 0.028969389544595877}
+{"part": "A", "n_dims": 8, "chi_x": 48, "backend": "cupy", "dtype": "float64", "ms_per_step": 103.04, "delta_bar": 0.03860371599727079}
+{"part": "A", "n_dims": 8, "chi_x": 48, "backend": "cupy", "dtype": "float32", "ms_per_step": 78.71, "delta_bar": 0.03860357760123032}
+{"part": "A", "n_dims": 15, "chi_x": 48, "backend": "numpy", "dtype": "float64", "ms_per_step": 1059.96, "delta_bar": 0.07011175801285462}
+{"part": "A", "n_dims": 15, "chi_x": 48, "backend": "cupy", "dtype": "float64", "ms_per_step": 490.09, "delta_bar": 0.09217022189814356}
+{"part": "A", "n_dims": 15, "chi_x": 48, "backend": "cupy", "dtype": "float32", "ms_per_step": 341.72, "delta_bar": 0.09217821925001986}
+{"part": "A", "n_dims": 15, "chi_x": 16, "backend": "numpy", "dtype": "float64", "ms_per_step": 106.14, "delta_bar": 0.10895444151549806}
+{"part": "A", "n_dims": 15, "chi_x": 16, "backend": "cupy", "dtype": "float64", "ms_per_step": 180.67, "delta_bar": 0.1157500268627369}
+{"part": "A", "n_dims": 15, "chi_x": 16, "backend": "cupy", "dtype": "float32", "ms_per_step": 148.34, "delta_bar": 0.1153932330362937}
+{"part": "B", "backend": "cupy", "dtype": "float32", "mc300": 65.51968543636461, "delta_bar": 0.07788706593718883, "ms_per_step": 70.8, "reference_cpu_fp64_mc": 64.8}
+{"part": "B", "backend": "cupy", "dtype": "float64", "mc300": 65.22088203312433, "delta_bar": 0.07787810399471577, "ms_per_step": 86.57, "reference_cpu_fp64_mc": 64.8}

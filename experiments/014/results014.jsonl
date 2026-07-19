@@ -1,0 +1,31 @@
+{"part": "subsets", "source": "exp009 X_d15_guided", "w_kind": "random-tt", "n_dims": 15, "K_readout": 256, "mc300": 25.82}
+{"part": "subsets", "source": "exp009 X_d15_guided", "w_kind": "random-tt", "n_dims": 15, "K_readout": 512, "mc300": 44.24}
+{"part": "subsets", "source": "exp009 X_d15_guided", "w_kind": "random-tt", "n_dims": 15, "K_readout": 1024, "mc300": 58.6}
+{"part": "subsets", "source": "exp009 X_d15_guided", "w_kind": "random-tt", "n_dims": 15, "K_readout": 2048, "mc300": 73.73}
+{"part": "subsets", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 256, "mc300": 130.42}
+{"part": "subsets", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 512, "mc300": 190.74}
+{"part": "subsets", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 1024, "mc300": 227.65}
+{"part": "subsets", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 2048, "mc300": 186.01}
+{"part": "subsets", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 256, "mc300": 8.96}
+{"part": "subsets", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 512, "mc300": 17.23}
+{"part": "subsets", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 1024, "mc300": 26.54}
+{"part": "subsets", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 2048, "mc300": 37.5}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 1024, "alpha": 1e-06, "mc300": 227.65}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 1024, "alpha": 0.0001, "mc300": 236.82}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 1024, "alpha": 0.01, "mc300": 205.38}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 1024, "alpha": 1.0, "mc300": 107.69}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 2048, "alpha": 1e-06, "mc300": 186.01}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 2048, "alpha": 0.0001, "mc300": 260.4}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 2048, "alpha": 0.01, "mc300": 249.35}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 8, "K_readout": 2048, "alpha": 1.0, "mc300": 136.39}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 1024, "alpha": 1e-06, "mc300": 26.54}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 1024, "alpha": 0.0001, "mc300": 12.07}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 1024, "alpha": 0.01, "mc300": 7.88}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 1024, "alpha": 1.0, "mc300": 7.82}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 2048, "alpha": 1e-06, "mc300": 37.5}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 2048, "alpha": 0.0001, "mc300": 21.43}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 2048, "alpha": 0.01, "mc300": 14.85}
+{"part": "alpha-check", "w_kind": "kron-sum", "n_dims": 15, "K_readout": 2048, "alpha": 1.0, "mc300": 14.75}
+{"part": "definitive", "w_kind": "kron-sum", "n_dims": 15, "N": 1073741824, "beta": 0.99, "chi_x": 48, "T": 16000, "K_readout": 2048, "alpha_star": 1e-06, "mc300_test": 54.12, "ms_per_step": 330.7, "delta_bar": 0.09731, "r2_profile_head": [0.542, 0.552, 0.791, 0.604, 0.731, 0.626, 0.601, 0.515, 0.636, 0.582]}
+{"part": "definitive", "w_kind": "kron-sum", "n_dims": 15, "N": 1073741824, "beta": 0.99, "chi_x": 48, "T": 16000, "K_readout": 4096, "alpha_star": 1e-06, "mc300_test": 61.55, "ms_per_step": 330.7, "delta_bar": 0.09731, "r2_profile_head": [0.787, 0.822, 0.761, 0.651, 0.771, 0.693, 0.623, 0.506, 0.75, 0.61]}
+{"part": "definitive", "w_kind": "kron-sum", "n_dims": 15, "N": 1073741824, "beta": 0.99, "chi_x": 48, "T": 16000, "K_readout": 8192, "alpha_star": 0.0001, "mc300_test": 63.87, "ms_per_step": 330.7, "delta_bar": 0.09731, "r2_profile_head": [0.647, 0.828, 0.771, 0.649, 0.762, 0.676, 0.63, 0.648, 0.766, 0.691]}
