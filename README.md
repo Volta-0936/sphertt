@@ -6,7 +6,10 @@
 Reservoirs beyond the memory wall — with a built-in, quantitatively
 validated theory of when truncation is safe.
 
-- Pure NumPy. One dependency. No GPU required.
+- Pure NumPy. One dependency. No GPU required — but supported:
+  `res.to("cupy", "float32")` runs the state evolution on a GPU
+  (3.1× at the heavy end on a consumer card; float32 is
+  physics-validated, see CHANGELOG 0.5.0).
 - The connectivity matrix `W` of an `N = 262,144`-unit reservoir fits in
   **73 KB** where a dense `W` would need **512 GB** — and task accuracy
   matches the dense-feasible regime.

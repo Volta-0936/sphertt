@@ -17,8 +17,9 @@ from __future__ import annotations
 
 import numpy as np
 
-from .tt import (power_iteration_norm, power_iteration_norm_tt, ttm_add,
-                 ttm_kron_orthogonal, ttm_matvec, ttm_params, ttm_random)
+from .tt import (power_iteration_norm, power_iteration_norm_tt, to_numpy,
+                 ttm_add, ttm_kron_orthogonal, ttm_matvec, ttm_params,
+                 ttm_random)
 
 __all__ = ["SphereTTReservoir", "build_w"]
 
@@ -90,13 +91,33 @@ class SphereTTReservoir:
             in_scale = 0.02 * np.sqrt(1024.0 / self.N) / np.sqrt(self.n_in)
         self.in_scale = float(in_scale)
         self.w_in = self.in_scale * rng.uniform(-1.0, 1.0, (self.N, self.n_in))
+        self._xp = np
+        self._dtype = np.float64
         self.reset()
+
+    def to(self, backend="numpy", dtype=None):
+        """Move the reservoir to a compute backend / precision, in place.
+        See :meth:`TTStateReservoir.to` for semantics."""
+        if backend == "cupy":
+            import cupy as xp
+        elif backend == "numpy":
+            xp = np
+        else:
+            raise ValueError(f"unknown backend {backend!r}")
+        dt = self._dtype if dtype is None else np.dtype(dtype)
+        conv = lambda a: xp.asarray(to_numpy(a), dtype=dt)  # noqa: E731
+        self.W = [conv(c) for c in self.W]
+        self.w_in = conv(self.w_in)
+        self.x = conv(self.x)
+        self._xp = xp
+        self._dtype = dt
+        return self
 
     # ------------------------------------------------------------------ api
 
     def reset(self):
         """Reset the reservoir state to the origin."""
-        self.x = np.zeros(self.N)
+        self.x = self._xp.zeros(self.N, dtype=self._dtype)
         return self
 
     def step(self, u):
@@ -106,8 +127,9 @@ class SphereTTReservoir:
         if u.shape != (self.n_in,):
             raise ValueError(f"expected input of shape ({self.n_in},), "
                              f"got {u.shape}")
+        u = self._xp.asarray(u, dtype=self._dtype)
         z = ttm_matvec(self.W, self.x, self.dims) + self.w_in @ u
-        n = np.linalg.norm(z)
+        n = float(self._xp.linalg.norm(z))
         self.x = z / n if n > 0 else z
         return self.x
 
@@ -135,11 +157,13 @@ class SphereTTReservoir:
             raise ValueError(f"expected input of shape (T, {self.n_in}), "
                              f"got {u.shape}")
         k = self.N if readout_idx is None else len(readout_idx)
-        X = np.empty((len(u), k))
+        idx = (None if readout_idx is None
+               else self._xp.asarray(np.asarray(readout_idx, dtype=np.intp)))
+        X = self._xp.empty((len(u), k), dtype=self._dtype)
         for t in range(len(u)):
             x = self.step(u[t])
-            X[t] = x if readout_idx is None else x[readout_idx]
-        return X
+            X[t] = x if idx is None else x[idx]
+        return to_numpy(X)
 
     # ----------------------------------------------------------------- info
 

@@ -52,7 +52,9 @@ def error_growth_rate(reservoir, u, chi_x, state_dims=None, washout=200):
         (default: reservoir.dims — note the max exact rank this implies).
     """
     dims = state_dims or reservoir.dims
-    W, w_in = reservoir.W, reservoir.w_in
+    from .tt import to_numpy
+    W = [to_numpy(c) for c in reservoir.W]    # twin runs on CPU float64
+    w_in = to_numpy(reservoir.w_in).astype(np.float64)
     wdims = reservoir.dims
     u = np.asarray(u, dtype=float)
     if u.ndim == 1:

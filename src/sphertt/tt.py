@@ -3,11 +3,33 @@
 TT vector : cores[k] of shape (r_{k-1}, n_k, r_k), with r_0 = r_d = 1.
 TT matrix : cores[k] of shape (r_{k-1}, m_k, n_k, r_k)  (m = out, n = in).
 
-All functions are dtype-agnostic (float64 / complex128).
+All functions are dtype-agnostic (float64 / float32 / complex128) and
+backend-agnostic: they dispatch on the array type of their inputs, so
+cores living on a GPU (CuPy arrays) are processed there.  CuPy is an
+optional dependency; with NumPy-only installs nothing changes.
 """
 from __future__ import annotations
 
 import numpy as np
+
+try:
+    import cupy as _cupy
+except ImportError:                                    # pragma: no cover
+    _cupy = None
+
+
+def get_array_module(x):
+    """Return numpy or cupy, matching where the array lives."""
+    if _cupy is not None:
+        return _cupy.get_array_module(x)
+    return np
+
+
+def to_numpy(x):
+    """Move an array to host memory (no-op for numpy arrays)."""
+    if _cupy is not None and isinstance(x, _cupy.ndarray):
+        return _cupy.asnumpy(x)
+    return x
 
 __all__ = [
     "tt_svd", "tt_to_dense", "tt_ranks", "tt_params",
@@ -15,7 +37,7 @@ __all__ = [
     "tt_rank1_kron_sum",
     "ttm_svd", "ttm_random", "ttm_kron_orthogonal", "ttm_add",
     "ttm_to_dense", "ttm_params", "ttm_matvec", "ttm_ttv",
-    "power_iteration_norm",
+    "power_iteration_norm", "get_array_module", "to_numpy",
 ]
 
 
@@ -61,13 +83,14 @@ def tt_params(cores):
     return int(sum(c.size for c in cores))
 
 
-def tt_zeros(dims):
+def tt_zeros(dims, xp=np, dtype=np.float64):
     """Rank-1 TT representation of the zero vector."""
-    return [np.zeros((1, n, 1)) for n in dims]
+    return [xp.zeros((1, n, 1), dtype=dtype) for n in dims]
 
 
 def tt_add(A, B, wa=1.0, wb=1.0):
     """Weighted sum ``wa*A + wb*B`` of two TT vectors (ranks add)."""
+    xp = get_array_module(A[0])
     d = len(A)
     out = []
     for k in range(d):
@@ -77,12 +100,12 @@ def tt_add(A, B, wa=1.0, wb=1.0):
         if d == 1:
             out.append(wa * a + wb * b)
         elif k == 0:
-            out.append(np.concatenate([wa * a, wb * b], axis=2))
+            out.append(xp.concatenate([wa * a, wb * b], axis=2))
         elif k == d - 1:
-            out.append(np.concatenate([a, b], axis=0))
+            out.append(xp.concatenate([a, b], axis=0))
         else:
-            c = np.zeros((ra0 + rb0, n, ra1 + rb1),
-                         dtype=np.result_type(a, b))
+            c = xp.zeros((ra0 + rb0, n, ra1 + rb1),
+                         dtype=np.result_type(a.dtype, b.dtype))
             c[:ra0, :, :ra1] = a
             c[ra0:, :, ra1:] = b
             out.append(c)
@@ -91,11 +114,12 @@ def tt_add(A, B, wa=1.0, wb=1.0):
 
 def tt_norm(cores):
     """Euclidean norm of a TT vector via a right-to-left Gram sweep."""
-    G = np.ones((1, 1))
+    xp = get_array_module(cores[0])
+    G = xp.ones((1, 1), dtype=cores[0].dtype)
     for c in reversed(cores):
-        t = np.tensordot(c, G, axes=([2], [0]))
-        G = np.tensordot(t, c.conj(), axes=([1, 2], [1, 2]))
-    return float(np.sqrt(abs(G[0, 0])))
+        t = xp.tensordot(c, G, axes=([2], [0]))
+        G = xp.tensordot(t, c.conj(), axes=([1, 2], [1, 2]))
+    return float(xp.sqrt(abs(G[0, 0])))
 
 
 def tt_round(cores, chi):
@@ -110,26 +134,34 @@ def tt_round(cores, chi):
         error  sqrt(sum of discarded singular values squared).
         The returned cores are left-orthogonal except the last one, so the
         vector norm equals ``np.linalg.norm(cores[-1])``.
+        On NumPy inputs ``trunc_err`` is a python float; on CuPy inputs it
+        is a 0-d device array (wrap in ``float()`` when you need the
+        value) — keeping it on device avoids a GPU pipeline stall per
+        call.  Kept ranks are decided from shapes only (never from
+        singular values), for the same reason; directions carrying
+        exactly-zero singular values contribute nothing to the
+        represented vector.
     """
+    xp = get_array_module(cores[0])
     d = len(cores)
     cores = list(cores)
     for k in range(d - 1, 0, -1):
         r0, n, r1 = cores[k].shape
-        Q, R = np.linalg.qr(cores[k].reshape(r0, n * r1).T)
+        Q, R = xp.linalg.qr(cores[k].reshape(r0, n * r1).T)
         cores[k] = Q.T.reshape(-1, n, r1)
-        cores[k - 1] = np.tensordot(cores[k - 1], R.T, axes=([2], [0]))
-    err2 = 0.0
+        cores[k - 1] = xp.tensordot(cores[k - 1], R.T, axes=([2], [0]))
+    err2 = xp.zeros((), dtype=cores[0].dtype)
     for k in range(d - 1):
         r0, n, r1 = cores[k].shape
-        U, S, Vt = np.linalg.svd(cores[k].reshape(r0 * n, r1),
+        U, S, Vt = xp.linalg.svd(cores[k].reshape(r0 * n, r1),
                                  full_matrices=False)
-        tol_rank = int(np.sum(S > 1e-14 * S[0])) if S.size and S[0] > 0 else 1
-        r = max(1, min(int(chi), tol_rank))
-        err2 += float(np.sum(S[r:] ** 2))
+        r = max(1, min(int(chi), int(S.shape[0])))
+        err2 = err2 + xp.sum(S[r:] ** 2)
         cores[k] = U[:, :r].reshape(r0, n, r)
-        cores[k + 1] = np.tensordot(S[:r, None] * Vt[:r], cores[k + 1],
+        cores[k + 1] = xp.tensordot(S[:r, None] * Vt[:r], cores[k + 1],
                                     axes=([1], [0]))
-    return cores, float(np.sqrt(err2))
+    err = xp.sqrt(err2)
+    return cores, (float(err) if xp is np else err)
 
 
 def tt_entries(cores, indices, dims):
@@ -138,12 +170,13 @@ def tt_entries(cores, indices, dims):
     Cost O(K * d * chi^2) for K indices — this is the readout path for
     reservoirs whose state never exists as a dense vector.
     """
-    idx = np.unravel_index(np.asarray(indices, dtype=np.intp), dims)
+    xp = get_array_module(cores[0])
+    idx = xp.unravel_index(xp.asarray(indices), dims)
     K = idx[0].size
-    v = np.ones((K, 1))
+    v = xp.ones((K, 1), dtype=cores[0].dtype)
     for k, c in enumerate(cores):
         sel = c[:, idx[k], :]                       # (r0, K, r1)
-        v = np.einsum('kr,rks->ks', v, sel)
+        v = xp.einsum('kr,rks->ks', v, sel)
     return v[:, 0]
 
 
@@ -260,14 +293,15 @@ def ttm_params(cores):
 
 def ttm_matvec(cores, x, col_dims):
     """y = W @ x for W in TT-matrix format and dense x. Never densifies W."""
+    xp = get_array_module(x)
     d = len(cores)
-    t = np.asarray(x).reshape(col_dims)[None, ...]
+    t = xp.asarray(x).reshape(col_dims)[None, ...]
     out_dims = []
     for k in range(d):
         c = cores[k]
         n_axis = 1 + len(out_dims)
-        t = np.tensordot(c, t, axes=([0, 2], [0, n_axis]))
-        t = np.moveaxis(t, 0, 1 + len(out_dims))
+        t = xp.tensordot(c, t, axes=([0, 2], [0, n_axis]))
+        t = xp.moveaxis(t, 0, 1 + len(out_dims))
         out_dims.append(c.shape[1])
     return t.reshape(-1)
 
@@ -278,9 +312,10 @@ def ttm_ttv(W, x):
     W cores (a0, m, n, a1), x cores (b0, n, b1) -> y cores (a0*b0, m, a1*b1).
     Follow with :func:`tt_round` to recompress.
     """
+    xp = get_array_module(x[0])
     out = []
     for wc, xc in zip(W, x):
-        t = np.einsum('amnb,cnd->acmbd', wc, xc)
+        t = xp.einsum('amnb,cnd->acmbd', wc, xc)
         a, c_, m, b, d_ = t.shape
         out.append(t.reshape(a * c_, m, b * d_))
     return out

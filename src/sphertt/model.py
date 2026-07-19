@@ -113,21 +113,22 @@ class ESN:
             "readout_quadratic": np.bool_(self.readout.quadratic),
             "n_cores": np.int64(len(res.W)),
         }
+        from .tt import to_numpy
         for i, c in enumerate(res.W):
-            payload[f"w_core_{i}"] = c
+            payload[f"w_core_{i}"] = to_numpy(c)
         if isinstance(res, SphereTTReservoir):
             payload["format"] = np.int64(1)
-            payload["w_in"] = res.w_in
-            payload["state"] = res.x
+            payload["w_in"] = to_numpy(res.w_in)
+            payload["state"] = to_numpy(res.x)
         elif isinstance(res, TTStateReservoir):
             payload["format"] = np.int64(2)
             payload["chi_x"] = np.int64(res.chi_x)
             payload["chi_in"] = np.int64(res.chi_in)
             for k in range(len(res.dims)):
-                payload[f"x_core_{k}"] = res.x[k]
+                payload[f"x_core_{k}"] = to_numpy(res.x[k])
             for j, v in enumerate(res.w_in_tt):
                 for k, c in enumerate(v):
-                    payload[f"win_{j}_core_{k}"] = c
+                    payload[f"win_{j}_core_{k}"] = to_numpy(c)
         else:
             raise NotImplementedError(
                 f"save not supported for {type(res).__name__}")
@@ -151,6 +152,8 @@ class ESN:
             raise ValueError(f"unknown save format {fmt}")
         res.dims = dims
         res.N = int(np.prod(dims))
+        res._xp = np
+        res._dtype = np.float64
         res.beta = float(d["beta"])
         res.chi_w = int(d["chi_w"])
         res.n_in = int(d["n_in"])

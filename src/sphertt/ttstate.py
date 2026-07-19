@@ -29,8 +29,8 @@ import numpy as np
 
 from .reservoir import build_w
 from .tt import (tt_add, tt_entries, tt_norm, tt_params, tt_ranks,
-                 tt_rank1_kron_sum, tt_round, tt_to_dense, tt_zeros, ttm_ttv,
-                 ttm_params)
+                 tt_rank1_kron_sum, tt_round, tt_to_dense, tt_zeros,
+                 to_numpy, ttm_ttv, ttm_params)
 
 __all__ = ["TTStateReservoir"]
 
@@ -96,13 +96,46 @@ class TTStateReservoir:
             if nrm > 0:
                 v[0] = v[0] * (target / nrm)
             self.w_in_tt.append(v)
+        self._xp = np
+        self._dtype = np.float64
         self.reset()
+
+    def to(self, backend="numpy", dtype=None):
+        """Move the reservoir to a compute backend / precision, in place.
+
+        Construction (seeds, W, w_in) always happens in NumPy float64 so
+        that a reservoir is bit-identical regardless of where it will run;
+        this converts the tensors afterwards.
+
+        Parameters
+        ----------
+        backend : "numpy" or "cupy"
+            "cupy" runs the state evolution on the GPU (CuPy required).
+        dtype : e.g. "float32", "float64", or None (keep current)
+            float32 is validated for the truncated regime (the rounding
+            noise delta_bar is orders of magnitude above float32 eps);
+            keep float64 for exact-regime / machine-precision work.
+        """
+        if backend == "cupy":
+            import cupy as xp
+        elif backend == "numpy":
+            xp = np
+        else:
+            raise ValueError(f"unknown backend {backend!r}")
+        dt = self._dtype if dtype is None else np.dtype(dtype)
+        conv = lambda a: xp.asarray(to_numpy(a), dtype=dt)  # noqa: E731
+        self.W = [conv(c) for c in self.W]
+        self.w_in_tt = [[conv(c) for c in v] for v in self.w_in_tt]
+        self.x = [conv(c) for c in self.x]
+        self._xp = xp
+        self._dtype = dt
+        return self
 
     # ------------------------------------------------------------------ api
 
     def reset(self):
         """Reset the reservoir state to the (rank-1) zero TT vector."""
-        self.x = tt_zeros(self.dims)
+        self.x = tt_zeros(self.dims, self._xp, self._dtype)
         self.last_delta = 0.0
         return self
 
@@ -118,10 +151,14 @@ class TTStateReservoir:
             if u[j] != 0.0:
                 z = tt_add(z, self.w_in_tt[j], 1.0, float(u[j]))
         z, err = tt_round(z, self.chi_x)
-        nrm = float(np.linalg.norm(z[-1]))   # valid: cores left-orthogonal
-        self.last_delta = err / nrm if nrm > 0 else 0.0
-        if nrm > 0:
-            z[-1] = z[-1] / nrm
+        xp = self._xp
+        # norm of the last core is the vector norm (left-orthogonality);
+        # the tiny floor keeps the zero state at zero without a host sync
+        nrm = xp.maximum(xp.linalg.norm(z[-1]),
+                         np.finfo(self._dtype).tiny)
+        z[-1] = z[-1] / nrm
+        ld = err / nrm
+        self.last_delta = float(ld) if xp is np else ld
         self.x = z
         return self
 
@@ -154,21 +191,25 @@ class TTStateReservoir:
                 raise ValueError("N > 65536: pass readout_idx (the dense "
                                  "state is exactly what we avoid building)")
             readout_idx = np.arange(self.N)
-        readout_idx = np.asarray(readout_idx, dtype=np.intp)
-        X = np.empty((len(u), len(readout_idx)))
-        deltas = np.empty(len(u))
+        readout_idx = self._xp.asarray(np.asarray(readout_idx,
+                                                  dtype=np.intp))
+        X = self._xp.empty((len(u), len(readout_idx)), dtype=self._dtype)
+        deltas = []
         for t in range(len(u)):
             self.step(u[t])
             X[t] = tt_entries(self.x, readout_idx, self.dims)
-            deltas[t] = self.last_delta
-        self.deltas_ = deltas
-        return X
+            deltas.append(self.last_delta)
+        if self._xp is np:
+            self.deltas_ = np.asarray(deltas, dtype=float)
+        else:                       # one transfer for the whole run
+            self.deltas_ = to_numpy(self._xp.stack(deltas)).astype(float)
+        return to_numpy(X)
 
     def to_dense_state(self):
         """Materialize the current state as a dense vector (small N only)."""
         if self.N * 8 > 2 ** 30:
             raise MemoryError("state too large to densify; use tt_entries")
-        return tt_to_dense(self.x)
+        return to_numpy(tt_to_dense(self.x))
 
     # ----------------------------------------------------------------- info
 

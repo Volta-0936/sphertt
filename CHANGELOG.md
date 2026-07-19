@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.5.0 (2026-07-19)
+
+- **GPU backend (optional)**: `reservoir.to("cupy", "float32")` moves the
+  state evolution to the GPU.  Construction stays NumPy float64 (seeds
+  and W are bit-identical regardless of backend); `pip install
+  sphertt[gpu]`.  All TT primitives are now backend/dtype-agnostic.
+- Measured on an RTX 3070 Ti: 3.1x at the heavy end (n_dims=15,
+  chi_x=48: 1060 -> 342 ms/step, i.e. a 70-min MC run in 23 min).
+  float32 is physics-validated (MC 65.5 vs 64.8 fp64 reference,
+  delta_bar identical to 4 decimals) — the truncation noise is orders of
+  magnitude above float32 roundoff.  Guidance: use GPU+float32 for
+  chi_x >= 32; below that the CPU is faster (small-matrix
+  QR/SVD kernels don't amortize).
+- `tt_round` is now synchronization-free on GPU: kept ranks are decided
+  from shapes only, and the truncation error is returned as a device
+  scalar on CuPy inputs (`deltas_` is still a NumPy array after `run`).
+- 4 new tests (44 total; GPU tests skip automatically without CuPy).
+
 ## 0.4.1 (2026-07-19)
 
 - Ship `experiments/`: scripts, JSONL logs, figures, and
