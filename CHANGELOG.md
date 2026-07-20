@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.5.2 (2026-07-21)
+
+No library code change.  This release ships corrected paper PDFs and the
+experiment-017 scripts.
+
+- **Papers corrected after an adversarial audit** (2026-07-20).  Paper I
+  is now v2, Paper II v3; both carry an explicit change note listing
+  every correction.  The substantive ones: Paper I's claim that
+  truncation-error amplification is bounded by 4 inside the stability
+  band is contradicted by this repository's own
+  `experiments/010/results010.jsonl` (in-band values reach ~19) and has
+  been corrected; the amplification law is demoted to a runtime
+  *diagnostic* relation, since `g_bar` is measured from the run it
+  describes.  Paper II withdraws the "93% of the dense ceiling" claim
+  (both numbers were censored by the 300-delay measurement window),
+  states the ambient `N > 1e9` as nominal (the rank-48 state carries
+  ~9e4 actual parameters), demotes the x2.1 depth factor to a lower
+  bound at a single seed, and adds the budget-matched classical
+  baselines the comparison previously lacked.
+- **Experiment 017** (`experiments/017/`): budget-matched baselines
+  (017a), window uncensoring (017b), d15 seed replication (017c),
+  fp32/fp64 check (017d), delay-task seed replication (017e).
+  Predictions were committed *before* the runs — a discipline the
+  earlier experiments did not follow.  017a and 017e completed; 017b-d
+  are pre-registered but have not been run, and the papers say so.
+- Honest headline from 017a: on linear memory per byte, classical
+  designs beat this one.  A dense quasi-orthogonal reservoir at the same
+  861 KB budget reaches MC 306-319 over a 1200-delay window, and a
+  ~16 KB cycle reservoir saturates the window; the TT-state record is
+  104.  The contribution of this library is the truncated-state regime
+  itself, not memory density.
+
 ## 0.5.1 (2026-07-19)
 
 - Add opt-in `orth="cholqr2"` to `tt_round` (shifted CholeskyQR2,
